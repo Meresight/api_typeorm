@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
-const { AppDataSource } = require('../config/ormconfig');
-const { User } = require('../entities/User');
+const { AppDataSource } = require('../dist/config/ormconfig');
+const { User } = require('../dist/entities/User');
 
 const userRepository = AppDataSource.getRepository(User);
 
