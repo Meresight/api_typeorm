@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Joi = require('joi');
-const validateRequest = require('_middleware/validate-request');
+const validateRequest = require("_middleware/validate-request");
 const Role = require('_helpers/role');
-const userService = require('users/user.service');
+const userService = require("./user.service");
 
-// routes
-
+// Routes
 router.get('/', getAll);
 router.get('/:id', getById);
 router.post('/', createSchema, create);
@@ -15,8 +14,7 @@ router.delete('/:id', _delete);
 
 module.exports = router;
 
-// route functions
-
+// Route functions
 function getAll(req, res, next) {
     userService.getAll()
         .then(users => res.json(users))
@@ -31,23 +29,23 @@ function getById(req, res, next) {
 
 function create(req, res, next) {
     userService.create(req.body)
-        .then(() => res.json({ message: 'User created' }))
+        .then(() => res.json({ message: "User created" }))
         .catch(next);
 }
 
 function update(req, res, next) {
     userService.update(req.params.id, req.body)
-        .then(user => res.json(user))
+        .then(() => res.json({ message: "User updated" }))
         .catch(next);
-}       
+}
 
 function _delete(req, res, next) {
     userService.delete(req.params.id)
-        .then(() => res.json({ message: 'User deleted' }))
+        .then(() => res.json({ message: "User deleted" }))
         .catch(next);
 }
- // schema function
 
+// Schema functions
 function createSchema(req, res, next) {
     const schema = Joi.object({
         title: Joi.string().required(),
@@ -66,7 +64,7 @@ function updateSchema(req, res, next) {
         title: Joi.string().empty(''),
         firstName: Joi.string().empty(''),
         lastName: Joi.string().empty(''),
-        role: Joi.string().valid(Role.Admin, Role.User),
+        role: Joi.string().valid(Role.Admin, Role.User).empty(''),
         email: Joi.string().email().empty(''),
         password: Joi.string().min(6).empty(''),
         confirmPassword: Joi.string().valid(Joi.ref('password')).empty('')
